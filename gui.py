@@ -38,7 +38,7 @@ class GPDWin4CP(gui.CTk):
         self.gyro_label = gui.CTkLabel(self.gyro_frame, text='Gyro')
         self.gyro_label.grid(row=0, column=0, padx=10, pady=10, sticky='w')
 
-        self.gyro_enable = gui.CTkCheckBox(self.gyro_frame, text='Enable', command=self.gyro_enable_cb)
+        self.gyro_enable = gui.CTkSwitch(self.gyro_frame, text='Enable', command=self.gyro_enable_cb)
         self.gyro_enable._check_state = self.gyro_cfg['enable']
         self.gyro_enable.grid(row=0, column=1, sticky='w')
 
