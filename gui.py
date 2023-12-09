@@ -4,13 +4,15 @@ import customtkinter as gui
 
 class GPDWin4CP(gui.CTk):
     GYRO_CFG_PATH = '/home/arch/GPD/BMI260/gyro.json'
+    SET_TDP_PATH = '/home/arch/GPD/TDP/set_tdp'
+    TDP_LIM_PATH = '/home/arch/GPD/TDP/get_tdp_lim'
 
     def __init__(self):
         super().__init__()
         self.gyro_cfg = json.load(open(self.GYRO_CFG_PATH))
-        self.last_tdp = int(open('/home/arch/GPD/TDP/get_tdp_lim').read())
+        self.last_tdp = int(open(self.TDP_LIM_PATH).read())
 
-        self.geometry('320x200')
+        self.geometry('320x250')
         self.title('GPD Win 4 Control Panel')
 
         self._init_tdp()
@@ -45,13 +47,19 @@ class GPDWin4CP(gui.CTk):
         self.gyro_sens.set(self.gyro_cfg['sens'])
         self.gyro_sens.grid(row=3, column=1, sticky='w')
 
+        self.gyro_plane_label = gui.CTkLabel(self, text='Plane')
+        self.gyro_plane_label.grid(row=4, column=0, padx=10, pady=10, sticky='w')
+
+        self.gyro_plane = gui.CTkComboBox(self, values=['XY', 'XZ'], command=self.gyro_plane_cb)
+        self.gyro_plane.grid(row=4, column=1, sticky='w')
+
     def save_gyro(self):
         json.dump(self.gyro_cfg, open(self.GYRO_CFG_PATH, 'w'))
 
     def tdp_slider_cb(self, val):
         print(f'TDP: {int(val)}')
         self.tdp_label.configure(text=f'TDP {int(val)}w')
-        open('/home/arch/GPD/TDP/set_tdp', 'w').write(str(int(val)))
+        open(self.SET_TDP_PATH, 'w').write(str(int(val)))
 
     def gyro_sens_slider_cb(self, val):
         self.gyro_cfg['sens'] = round(val, 2)
@@ -68,6 +76,11 @@ class GPDWin4CP(gui.CTk):
         self.gyro_cfg['mode'] = mode.lower()
         self.save_gyro()
         print(f'mode: {self.gyro_cfg["mode"]}')
+
+    def gyro_plane_cb(self, plane):
+        self.gyro_cfg['plane'] = plane.lower()
+        self.save_gyro()
+        print(f'plane: {self.gyro_cfg["plane"]}')
 
 
 # settings
