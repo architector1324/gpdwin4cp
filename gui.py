@@ -12,46 +12,53 @@ class GPDWin4CP(gui.CTk):
         self.gyro_cfg = json.load(open(self.GYRO_CFG_PATH))
         self.last_tdp = int(open(self.TDP_LIM_PATH).read())
 
-        self.geometry('320x250')
         self.title('GPD Win 4 Control Panel')
+        self.geometry('300x270')
+        self.resizable(False, True)
 
         self._init_tdp()
         self._init_gyro()
 
     def _init_tdp(self):
-        self.tdp_label = gui.CTkLabel(self, text=f'TDP {self.last_tdp}w')
+        self.tdp_frame = gui.CTkFrame(self)
+        self.tdp_frame.grid(row=0, column=0, padx=10, pady=(10, 0), sticky='NSEW')
+
+        self.tdp_label = gui.CTkLabel(self.tdp_frame, text=f'TDP {self.last_tdp}w')
         self.tdp_label.grid(row=0, column=0, padx=10, pady=10, sticky='w')
 
-        self.tdp_slider = gui.CTkSlider(self, from_=4, to=28, number_of_steps=24, width=230, command=self.tdp_slider_cb)
+        self.tdp_slider = gui.CTkSlider(self.tdp_frame, from_=4, to=28, number_of_steps=24, command=self.tdp_slider_cb)
         self.tdp_slider.set(self.last_tdp)
         self.tdp_slider.grid(row=0, column=1, sticky='w')
 
     def _init_gyro(self):
-        self.gyro_label = gui.CTkLabel(self, text='Gyro')
-        self.gyro_label.grid(row=1, column=0, padx=10, pady=10, sticky='w')
+        self.gyro_frame = gui.CTkFrame(self)
+        self.gyro_frame.grid(row=1, column=0, padx=10, pady=(10, 0), sticky='NSEW')
 
-        self.gyro_enable = gui.CTkCheckBox(self, text='Enable', command=self.gyro_enable_cb)
+        self.gyro_label = gui.CTkLabel(self.gyro_frame, text='Gyro')
+        self.gyro_label.grid(row=0, column=0, padx=10, pady=10, sticky='w')
+
+        self.gyro_enable = gui.CTkCheckBox(self.gyro_frame, text='Enable', command=self.gyro_enable_cb)
         self.gyro_enable._check_state = self.gyro_cfg['enable']
-        self.gyro_enable.grid(row=1, column=1, sticky='w')
+        self.gyro_enable.grid(row=0, column=1, sticky='w')
 
-        self.gyro_mode_label = gui.CTkLabel(self, text='Mode')
-        self.gyro_mode_label.grid(row=2, column=0, padx=10, pady=10, sticky='w')
+        self.gyro_mode_label = gui.CTkLabel(self.gyro_frame, text='Mode')
+        self.gyro_mode_label.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 
-        self.gyro_mode = gui.CTkComboBox(self, values=['Mouse', 'Gamepad'], command=self.gyro_mode_cb)
-        self.gyro_mode.grid(row=2, column=1, sticky='w')
+        self.gyro_mode = gui.CTkComboBox(self.gyro_frame, values=['Mouse', 'Gamepad'], command=self.gyro_mode_cb)
+        self.gyro_mode.grid(row=1, column=1, sticky='w')
 
-        self.gyro_sens_label = gui.CTkLabel(self, text=f'Sens {self.gyro_cfg["sens"]}')
-        self.gyro_sens_label.grid(row=3, column=0, padx=10, pady=10, sticky='w')
+        self.gyro_sens_label = gui.CTkLabel(self.gyro_frame, text=f'Sens {self.gyro_cfg["sens"]}')
+        self.gyro_sens_label.grid(row=2, column=0, padx=10, pady=10, sticky='w')
 
-        self.gyro_sens = gui.CTkSlider(self, from_=0, to=1, number_of_steps=100, width=230, command=self.gyro_sens_slider_cb)
+        self.gyro_sens = gui.CTkSlider(self.gyro_frame, from_=0, to=1, number_of_steps=100, command=self.gyro_sens_slider_cb)
         self.gyro_sens.set(self.gyro_cfg['sens'])
-        self.gyro_sens.grid(row=3, column=1, sticky='w')
+        self.gyro_sens.grid(row=2, column=1, sticky='w')
 
-        self.gyro_plane_label = gui.CTkLabel(self, text='Plane')
-        self.gyro_plane_label.grid(row=4, column=0, padx=10, pady=10, sticky='w')
+        self.gyro_plane_label = gui.CTkLabel(self.gyro_frame, text='Plane')
+        self.gyro_plane_label.grid(row=3, column=0, padx=10, pady=10, sticky='w')
 
-        self.gyro_plane = gui.CTkComboBox(self, values=['XY', 'XZ'], command=self.gyro_plane_cb)
-        self.gyro_plane.grid(row=4, column=1, sticky='w')
+        self.gyro_plane = gui.CTkComboBox(self.gyro_frame, values=['XY', 'XZ'], command=self.gyro_plane_cb)
+        self.gyro_plane.grid(row=3, column=1, sticky='w')
 
     def save_gyro(self):
         json.dump(self.gyro_cfg, open(self.GYRO_CFG_PATH, 'w'))
