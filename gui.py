@@ -13,11 +13,12 @@ class GPDWin4CP(gui.CTk):
         self.last_tdp = int(open(self.TDP_LIM_PATH).read())
 
         self.title('GPD Win 4 Control Panel')
-        self.geometry('300x270')
+        self.geometry('300x310')
         self.resizable(False, True)
 
         self._init_tdp()
         self._init_gyro()
+        self._init_exit()
 
     def _init_tdp(self):
         self.tdp_frame = gui.CTkFrame(self)
@@ -60,6 +61,10 @@ class GPDWin4CP(gui.CTk):
         self.gyro_plane = gui.CTkComboBox(self.gyro_frame, values=['XY', 'XZ'], command=self.gyro_plane_cb)
         self.gyro_plane.grid(row=3, column=1, sticky='w')
 
+    def _init_exit(self):
+        self.exit_but = gui.CTkButton(self, text='Ok', command=self.exit_cb)
+        self.exit_but.grid(row=2, column=0, padx=10, pady=(10, 0), sticky='NSEW')
+
     def save_gyro(self):
         json.dump(self.gyro_cfg, open(self.GYRO_CFG_PATH, 'w'))
 
@@ -88,6 +93,9 @@ class GPDWin4CP(gui.CTk):
         self.gyro_cfg['plane'] = plane.lower()
         self.save_gyro()
         print(f'plane: {self.gyro_cfg["plane"]}')
+
+    def exit_cb(self):
+        quit()
 
 
 # settings
