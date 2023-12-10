@@ -39,13 +39,19 @@ class GPDWin4CP(gui.CTk):
         self.gyro_label.grid(row=0, column=0, padx=10, pady=10, sticky='w')
 
         self.gyro_enable = gui.CTkSwitch(self.gyro_frame, text='Enable', command=self.gyro_enable_cb)
-        self.gyro_enable._check_state = self.gyro_cfg['enable']
+
+        if self.gyro_cfg['enable']:
+            self.gyro_enable.select()
+        else:
+            self.gyro_enable.deselect()
+
         self.gyro_enable.grid(row=0, column=1, sticky='w')
 
         self.gyro_mode_label = gui.CTkLabel(self.gyro_frame, text='Mode')
         self.gyro_mode_label.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 
-        self.gyro_mode = gui.CTkComboBox(self.gyro_frame, values=['Mouse', 'Gamepad'], command=self.gyro_mode_cb)
+        self.gyro_mode = gui.CTkComboBox(self.gyro_frame, values=['Mouse', 'Gamepad', 'gamepad_l', 'gamepad_r'], command=self.gyro_mode_cb)
+        self.gyro_mode.set(self.gyro_cfg['mode'])
         self.gyro_mode.grid(row=1, column=1, sticky='w')
 
         self.gyro_sens_label = gui.CTkLabel(self.gyro_frame, text=f'Sens {self.gyro_cfg["sens"]}')
@@ -59,6 +65,7 @@ class GPDWin4CP(gui.CTk):
         self.gyro_plane_label.grid(row=3, column=0, padx=10, pady=10, sticky='w')
 
         self.gyro_plane = gui.CTkComboBox(self.gyro_frame, values=['XY', 'XZ'], command=self.gyro_plane_cb)
+        self.gyro_plane.set(self.gyro_cfg['plane'].upper())
         self.gyro_plane.grid(row=3, column=1, sticky='w')
 
     def _init_exit(self):
