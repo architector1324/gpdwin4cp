@@ -57,7 +57,7 @@ class GPDWin4CP(gui.CTk):
         self.gyro_sens_label = gui.CTkLabel(self.gyro_frame, text=f'Sens {self.gyro_cfg["sens"]}')
         self.gyro_sens_label.grid(row=2, column=0, padx=10, pady=10, sticky='w')
 
-        self.gyro_sens = gui.CTkSlider(self.gyro_frame, from_=0, to=1, number_of_steps=100, command=self.gyro_sens_slider_cb)
+        self.gyro_sens = gui.CTkSlider(self.gyro_frame, from_=0, to=2, number_of_steps=200, command=self.gyro_sens_slider_cb)
         self.gyro_sens.set(self.gyro_cfg['sens'])
         self.gyro_sens.grid(row=2, column=1, sticky='w')
 
